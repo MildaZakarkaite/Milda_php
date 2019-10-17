@@ -1,0 +1,1 @@
+[{"team_name":"Balta","players":[{"nickname":"Sestas","score":0},{"nickname":"Pirmas","score":0},{"nickname":"Antras","score":8}]},{"team_name":"Geltona","players":[]},{"team_name":"Zydra","players":[]}]

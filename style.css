@@ -1,0 +1,10 @@
+.error{
+    color: red;
+}
+
+
+/*Cia dabar susitvarkom kad butu grazus inputas be br tago*/
+.input-text {
+    display: block;
+}
+
