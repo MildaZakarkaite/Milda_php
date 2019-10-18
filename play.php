@@ -1,15 +1,17 @@
 <?php
-
 require 'functions/form/core.php';
 require 'functions/html/generators.php';
 require 'functions/file.php';
 
-if (empty($_COOKIE)) {
+session_start();
+
+if (empty($_SESSION)) {
     header('Location: join.php');
     exit();
 }
 
 $form = [
+    'fields' => [],
     'buttons' => [
         'kick' => [
             'type' => 'submit',
@@ -26,15 +28,15 @@ function validate_kick($filtered_input, &$form) {
     $teams = file_to_array('data/teams.txt');
 
     foreach ($teams as &$team) {
-        if ($team['team_name'] == $_COOKIE['cookie_team']) {
+        if ($team['team_name'] == $_SESSION['cookie_team']) {
             foreach ($team['players'] as &$player) {
-                if ($player['nickname'] == $_COOKIE['cookie_nickname']) {
+                if ($player['nickname'] == $_SESSION['cookie_nickname']) {
                     return true;
                 }
             }
         }
     }
-    
+
     $form['message'] = 'Tu kazka cia suki';
 }
 
@@ -42,9 +44,9 @@ function form_success($filtered_input, &$form) {
     $teams = file_to_array('data/teams.txt');
 
     foreach ($teams as &$team) {
-        if ($team['team_name'] == $_COOKIE['cookie_team']) {
+        if ($team['team_name'] == $_SESSION['cookie_team']) {
             foreach ($team['players'] as &$player) {
-                if ($player['nickname'] == $_COOKIE['cookie_nickname']) {
+                if ($player['nickname'] == $_SESSION['cookie_nickname']) {
                     $player['score'] ++;
                 }
             }
@@ -59,16 +61,18 @@ if (get_form_action() == 'kick') {
     validate_form([], $form);
 }
 
-$text = 'Go For It, ' . $_COOKIE['cookie_nickname'];
-
+$text = 'Go For It, ' . $_SESSION['cookie_nickname'];
 ?>
 <html>
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="includes/style.css">
+
+
     </head>
     <body>
-		<h1><?php print $text; ?></h1>
-		<?php require 'templates/form.tpl.php'; ?>
+         <?php require 'navigation.php'; ?>   
+        <h1><?php print $text; ?></h1>
+<?php require 'templates/form.tpl.php'; ?>
     </body>
 </html>

@@ -82,15 +82,40 @@ if (!empty($filtered_input)) {
             .create{
                 background-color: darkslategray;
             }
-            /*            .input-text{
-                            display: fixed;
-                            margin-top: 50px;
-                            margin-right: 50px;
-                            z-index: 1;
-                        }*/
+
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                border: 1px solid #e7e7e7;
+                background-color: darkslategray;
+            }
+
+            li {
+                float: left;
+            }
+
+            li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            li a:hover:not(.active) {
+                background-color: #ddd;
+            }
+
+            li a.active {
+                color: white;
+                background-color: olive;;
+            }
         </style>
     </head>
     <body>
+        <?php require 'navigation.php'; ?>   
         <div>
             <div class="input-text">
                 <?php require 'templates/form.tpl.php'; ?>       

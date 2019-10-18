@@ -4,6 +4,8 @@ require 'functions/form/core.php';
 require 'functions/html/generators.php';
 require 'functions/file.php';
 
+session_start();
+
 var_dump($_POST);
 $form = [
     'fields' => [
@@ -64,8 +66,10 @@ function form_success($filtered_input, &$form) {
     }
 
     array_to_file($teams, 'data/teams.txt');
-    setcookie('cookie_nickname', $filtered_input['player_name'], time() + 3600, '/');
-    setcookie('cookie_team', $filtered_input['team_select'], time() + 3600, '/');
+    $_SESSION['cookie_nickname'] = $filtered_input['player_name'];
+    $_SESSION['cookie_team'] = $filtered_input['team_select'];
+//    setcookie('cookie_nickname', $filtered_input['player_name'], time() + 3600, '/');
+//    setcookie('cookie_team', $filtered_input['team_select'], time() + 3600, '/');
 }
 
 function validate_player($field_input, &$field) {
@@ -91,8 +95,8 @@ if (!empty($filtered_input)) {
     $success = validate_form($filtered_input, $form);
 }
 
-if(isset($_COOKIE['cookie_nickname'])){
-     $text = 'Labas, žaidėjau ' . $_COOKIE['cookie_nickname'] . ', jau esi komandoje ' . $_COOKIE['cookie_team'] . '!';
+if(isset($_SESSION['cookie_nickname'])){
+     $text = 'Labas, žaidėjau ' . $_SESSION['cookie_nickname'] . ', jau esi komandoje ' . $_SESSION['cookie_team'] . '!';
 }
 
 ?>
@@ -102,6 +106,7 @@ if(isset($_COOKIE['cookie_nickname'])){
         <title>Form Templates</title>
     </head>
     <body>
+         <?php require 'navigation.php'; ?>   
         <?php require 'templates/form.tpl.php'; ?>
     </body>
 </html>
