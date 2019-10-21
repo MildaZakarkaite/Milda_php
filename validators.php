@@ -89,6 +89,21 @@ var_dump($params);
     return true;
 }
 
+function validate_email_unique($field_input, &$field) {
+    $users = file_to_array('data/users.txt');
+    var_dump($users);
+
+    if (!empty($users)) {
+        foreach ($users as $value) {
+            if (($value['email']) == ($field_input)) {
+                $field['error'] = 'Toks email adresas jau yra';
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 //____________________________________________________________
 function validate_password($field_input, &$field) {
     if (strlen($field_input) < 8) {
