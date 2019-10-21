@@ -37,29 +37,35 @@ function validate_form($filtered_input, &$form) {
     $success = true;
 
     // Kiekvieno field'o validacija
-    foreach ($form['fields'] ?? [] as $field_id => &$field) {
-        $field_input = $filtered_input[$field_id];
-        $field['value'] = $field_input;
+    if (isset($form['fields'])) {
+        // Jeigu naudosime foreach value per referenca
+        // negalima naudoti shorthandinio isset'o
+        foreach ($form['fields']as $field_id => &$field) {
+            $field_input = $filtered_input[$field_id];
+            $field['value'] = $field_input;
 
-        foreach ($field['validators'] ?? [] as $validator) {
-            $is_valid = $validator($field_input, $field);
-            if (!$is_valid) {
-                $success = false;
-                break;
+            foreach ($field['validators'] ?? [] as $validator) {
+                $is_valid = $validator($field_input, $field);
+                if (!$is_valid) {
+                    $success = false;
+                    break;
+                }
             }
         }
     }
 
-    // Visos formos validacija
+
     if ($success) {
-        foreach ($form['validators'] ?? [] as $validator) {
-            // Å iems validatoriams paduodame visus userio inputus
-            // ir visÄ… formÄ…
-            $is_valid = $validator($filtered_input, $form);
-            if (!$is_valid) {
-                $success = false;
-                break;
+        foreach ($form['validators'] ?? [] as $validator_id => $validator) {
+            if (is_array($validator)) {
+           $is_valid = $validator_id($filtered_input, $form, $validator);
+            } else {
+                $is_valid = $validator($filtered_input, $form);
             }
+           if (!$is_valid){
+               $success = false;
+               break;
+           }
         }
     }
 
@@ -74,4 +80,5 @@ function validate_form($filtered_input, &$form) {
     }
 
     return $success;
-}
+    }
+
